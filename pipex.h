@@ -7,6 +7,7 @@
 # include <stdio.h>
 # include <fcntl.h>
 # include "libft.h"
+# include <errno.h>
 
 typedef struct s_grp
 {
@@ -16,18 +17,25 @@ typedef struct s_grp
 	int		infilefd;
 	int		outfilefd;
 	char	*pathlist;
+	char	**cmd1;
+	char	**cmd2;
 }	t_grp;
 
 /*PARSING*/
-int		ft_parsing(t_grp *pipex, int argc, char **argv, char **envp);
+int		ft_parsing(t_grp *pipex, char **argv, char **envp);
 void	ft_get_init(t_grp *pipex);
-void	ft_get_fd(t_grp *pipex, int argc, char **argv);
+void	ft_get_fd(t_grp *pipex, char **argv);
+char	**ft_get_cmd(char *argcmd);
 void	ft_free_split(char **to_free1, char **to_free2);
 char	*ft_free_spliterr(char **to_free1, char **to_free2);
 char	*ft_get_cmdpath(char *argcmd, char **envp);
 char	*ft_get_cmdpathbis(char *path, char **cmd, char **cmdpaths);
 
 /*EXEC*/
-void	ft_exec_cmd1(t_grp *pipex);
-void	ft_change_fd1(t_grp *pipex);
+void	ft_exec_cmd1(t_grp *pipex, int pipefd[2], char **envp);
+void	ft_change_fd1(t_grp *pipex, int pipefd[2], char **envp);
+void	ft_exec_cmd2(t_grp *pipex, int pipefd[2], char **envp);
+void	ft_change_fd2(t_grp *pipex, int pipefd[2], char **envp);
+
+void	ft_error(char *str);
 #endif

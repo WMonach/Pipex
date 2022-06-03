@@ -13,6 +13,8 @@ OBJS_DIR = .objs
 OBJ =	$(addprefix $(OBJS_DIR)/, $(FILES:.c=.o))
 
 FILES = pipex.c									\
+		parsing.c								\
+		exec.c									\
 
 all: libs $(NAME)
 
