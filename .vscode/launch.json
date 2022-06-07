@@ -1,0 +1,17 @@
+"version": "0.2.0",
+"configurations": [
+	{
+		"name": "clang-10 - Build and debug active file",
+		"type": "cppdbg",
+		"request": "launch",
+		"program": "${fileDirname}/pipex",
+		"args": [file1, grep a, wc -l, file2],
+		"stopAtEntry": false,
+		"cwd": "${fileDirname}",
+		"environment": [],
+		"externalConsole": false,
+		"MIMode": "lldb",
+		"preLaunchTask": "C/C++: clang-10 build active file"
+	}
+]
+}

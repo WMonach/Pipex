@@ -6,7 +6,7 @@
 # include <unistd.h>
 # include <stdio.h>
 # include <fcntl.h>
-# include "libft.h"
+# include "libft/libft.h"
 # include <errno.h>
 
 typedef struct s_grp
@@ -16,13 +16,14 @@ typedef struct s_grp
 	char	*cmd2path;
 	int		infilefd;
 	int		outfilefd;
-	char	*pathlist;
 	char	**cmd1;
 	char	**cmd2;
+	int		*pid;
+	int		pidnbr;
 }	t_grp;
 
 /*PARSING*/
-int		ft_parsing(t_grp *pipex, char **argv, char **envp);
+void	ft_parsing(t_grp *pipex, char **argv, char **envp);
 void	ft_get_init(t_grp *pipex);
 void	ft_get_fd(t_grp *pipex, char **argv);
 char	**ft_get_cmd(char *argcmd);
@@ -38,4 +39,6 @@ void	ft_exec_cmd2(t_grp *pipex, int pipefd[2], char **envp);
 void	ft_change_fd2(t_grp *pipex, int pipefd[2], char **envp);
 
 void	ft_error(char *str);
+void	ft_exit_error(t_grp *pipex);
+void	ft_get_pid(t_grp *pipex);
 #endif

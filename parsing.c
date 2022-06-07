@@ -3,10 +3,17 @@
 char	**ft_get_cmd(char *argcmd)
 {
 	char	**cmd;
+	int		i;
 
+	i = 0;
 	cmd = ft_split(argcmd, ' ');
 	if (cmd == NULL)
-		ft_error("ft_get_cmd");
+	{
+		while (cmd[i] != NULL)
+			free(cmd[i++]);
+		free(cmd);
+		return (NULL);
+	}
 	return (cmd);
 }
 
@@ -49,22 +56,32 @@ char	*ft_get_cmdpath(char *argcmd, char **envp)
 	return ("ha tu m'as eu batard");
 }
 
+void	ft_get_pid(t_grp *pipex)
+{
+	pipex->pid = malloc(sizeof(int) * 3);
+	pipex->pidnbr = 2;
+}
+
 void	ft_get_fd(t_grp *pipex, char **argv)
 {
 	pipex->infilefd = open(argv[1], 0, O_RDONLY);
 	pipex->outfilefd = open(argv[4], 0, O_RDONLY);
 }
 
-int	ft_parsing(t_grp *pipex, char **argv, char **envp)
+void	ft_parsing(t_grp *pipex, char **argv, char **envp)
 {
 	ft_get_fd(pipex, argv);
+	ft_get_pid(pipex);
 	pipex->cmd1path = ft_get_cmdpath(argv[2], envp);
-	// printf("%s\n", pipex->cmd1path);
-	printf("%d\n", pipex->infilefd);
+	if (pipex->cmd1path == NULL)
+		ft_exit_error(pipex);
 	pipex->cmd2path = ft_get_cmdpath(argv[3], envp);
-	// printf("%s\n", pipex->cmd2path);
-	printf("%d\n", pipex->outfilefd);
+	if (pipex->cmd1path == NULL)
+		ft_exit_error(pipex);
 	pipex->cmd1 = ft_get_cmd(argv[2]);
-	pipex->cmd2 = ft_get_cmd(argv[4]);
-	return (1);
+	if (pipex->cmd1 == NULL)
+		ft_exit_error(pipex);
+	pipex->cmd2 = ft_get_cmd(argv[3]);
+	if (pipex->cmd2 == NULL)
+		ft_exit_error(pipex);
 }
