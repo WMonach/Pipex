@@ -3,20 +3,25 @@
 int	main(int argc, char **argv, char **envp)
 {
 	t_grp	*pipex;
-	int		pipefd[2];
+	int		i;
 
-	if (argc != 5)
-		return (1);
-	if (pipe(pipefd) < 0)
+	i = -1;
+	if (ft_check(argc, argv) == -1)
 		return (1);
 	pipex = malloc(sizeof(t_grp));
+	if (pipex == NULL)
+		return (1);
+	if (pipe(pipex->pipefd) < 0)
+		return (1);
 	ft_get_init(pipex);
-	ft_parsing(pipex, argv, envp);
-	ft_exec_cmd1(pipex, pipefd, envp);
-	ft_exec_cmd2(pipex, pipefd, envp);
-	ft_waitpid(pipex);
+	ft_parsing(pipex, argv, envp, argc - 2);
+	while (++i < pipex->pidnbr)
+		ft_exec_cmd(pipex, envp, i);
 	close (pipex->outfilefd);
 	close (pipex->infilefd);
+	close (pipex->pipefd[0]);
+	close (pipex->pipefd[1]);
+	ft_waitpid(pipex);
 	return (0);
 }
 
@@ -71,7 +76,7 @@ void	ft_exit_error(t_grp *pipex)
 	int	i;
 
 	i = 0;
-	printf("ERROR : exec_error\n");
+	dprintf(1, "ERROR : exec_error\n");
 	free(pipex->cmd1path);
 	free(pipex->cmd2path);
 	while (pipex->cmd1[i] != NULL)
@@ -87,6 +92,8 @@ void	ft_exit_error(t_grp *pipex)
 	free(pipex->cmdpaths);
 	close(pipex->infilefd);
 	close(pipex->outfilefd);
+	close (pipex->pipefd[0]);
+	close (pipex->pipefd[1]);
 	free(pipex);
 	exit(0);
 }
@@ -95,11 +102,9 @@ void	ft_waitpid(t_grp *pipex)
 {
 	int	i;
 
-	i = 0;
-	while (i < pipex->pidnbr)
-	{
-		waitpid()
-	}
+	i = -1;
+	while (++i < pipex->pidnbr)
+		waitpid(pipex->pid[i], NULL, 0);
 }
 /*
 preparer des fork pour faire des enfants
