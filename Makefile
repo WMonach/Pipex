@@ -15,6 +15,7 @@ OBJ =	$(addprefix $(OBJS_DIR)/, $(FILES:.c=.o))
 FILES = pipex.c									\
 		parsing.c								\
 		exec.c									\
+		check.c									\
 
 all: libs $(NAME)
 

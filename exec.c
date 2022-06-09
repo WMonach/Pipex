@@ -3,7 +3,6 @@
 void	ft_exec_cmd(t_grp *pipex, char **envp, int pid)
 {
 	pipex->pid[pid] = fork();
-	printf("ha\n");
 	if (pipex->pid[pid] < 0)
 	{
 		perror("error");

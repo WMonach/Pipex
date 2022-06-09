@@ -32,6 +32,7 @@ void	ft_get_init(t_grp *pipex)
 	pipex->cmd1 = NULL;
 	pipex->cmd2 = NULL;
 	pipex->cmdpaths = NULL;
+	pipex->pid = NULL;
 }
 
 char	*ft_free_spliterr(char **to_free1, char **to_free2)
@@ -79,17 +80,18 @@ void	ft_exit_error(t_grp *pipex)
 	dprintf(1, "ERROR : exec_error\n");
 	free(pipex->cmd1path);
 	free(pipex->cmd2path);
-	while (pipex->cmd1[i] != NULL)
+	while (pipex->cmd1 && pipex->cmd1[i] != NULL)
 		free(pipex->cmd1[i++]);
 	free(pipex->cmd1);
 	i = 0;
-	while (pipex->cmd2[i] != NULL)
+	while (pipex->cmd2 && pipex->cmd2[i] != NULL)
 		free(pipex->cmd2[i++]);
 	free(pipex->cmd2);
 	i = 0;
-	while (pipex->cmdpaths[i] != NULL)
+	while (pipex->cmdpaths && pipex->cmdpaths[i] != NULL)
 		free(pipex->cmdpaths[i++]);
 	free(pipex->cmdpaths);
+	free(pipex->pid);
 	close(pipex->infilefd);
 	close(pipex->outfilefd);
 	close (pipex->pipefd[0]);

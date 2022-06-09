@@ -23,7 +23,7 @@ char	*ft_get_cmdpathbis(char *path, char **cmd, char **cmdpaths)
 	return (NULL);
 }
 
-char	*ft_get_cmdpath(char *argcmd, char **envp)
+char	*ft_get_cmdpath(t_grp *pipex, char *argcmd, char **envp)
 {
 	char	**cmd;
 	char	*path;
@@ -49,7 +49,9 @@ char	*ft_get_cmdpath(char *argcmd, char **envp)
 		if (path != NULL)
 			return (path);
 	}
+	printf("command not found: %s\n", cmd[0]);
 	ft_free_split(cmd, cmdpaths);
+	ft_exit_error(pipex);
 	return ("ha tu m'as eu batard");
 }
 
@@ -70,15 +72,16 @@ void	ft_get_fd(t_grp *pipex, char **argv)
 void	ft_parsing(t_grp *pipex, char **argv, char **envp, int pidnbr)
 {
 	ft_get_fd(pipex, argv);
+	printf("%d\n", pipex->outfilefd);
 	if (pipex->infilefd < 0)
 		perror("infile");
 	if (pipex->outfilefd < 0)
 		perror("outfile");
 	ft_get_pid(pipex, pidnbr);
-	pipex->cmd1path = ft_get_cmdpath(argv[2], envp);
+	pipex->cmd1path = ft_get_cmdpath(pipex, argv[2], envp);
 	if (pipex->cmd1path == NULL)
 		ft_exit_error(pipex);
-	pipex->cmd2path = ft_get_cmdpath(argv[3], envp);
+	pipex->cmd2path = ft_get_cmdpath(pipex, argv[3], envp);
 	if (pipex->cmd1path == NULL)
 		ft_exit_error(pipex);
 	pipex->cmd1 = ft_get_cmd(argv[2]);
