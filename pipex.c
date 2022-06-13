@@ -11,16 +11,15 @@ int	main(int argc, char **argv, char **envp)
 	pipex = malloc(sizeof(t_grp));
 	if (pipex == NULL)
 		return (1);
-	if (pipe(pipex->pipefd) < 0)
-		return (1);
 	ft_get_init(pipex);
-	ft_parsing(pipex, argv, envp, argc - 2);
+	ft_parsing(pipex, argv, envp, argc - 3);
 	while (++i < pipex->pidnbr)
 		ft_exec_cmd(pipex, envp, i);
 	close (pipex->outfilefd);
 	close (pipex->infilefd);
-	close (pipex->pipefd[0]);
-	close (pipex->pipefd[1]);
+	i = 0;
+	while (i <= pipex->pidnbr)
+		close(pipex->pipefd[i++]);
 	ft_waitpid(pipex);
 	return (0);
 }
@@ -33,6 +32,8 @@ void	ft_get_init(t_grp *pipex)
 	pipex->cmd2 = NULL;
 	pipex->cmdpaths = NULL;
 	pipex->pid = NULL;
+	pipex->cmdspath = NULL;
+	pipex->cmds = NULL;
 }
 
 char	*ft_free_spliterr(char **to_free1, char **to_free2)
@@ -94,8 +95,10 @@ void	ft_exit_error(t_grp *pipex)
 	free(pipex->pid);
 	close(pipex->infilefd);
 	close(pipex->outfilefd);
-	close (pipex->pipefd[0]);
-	close (pipex->pipefd[1]);
+	i = 0;
+	while (i <= pipex->pidnbr)
+		close(pipex->pipefd[i++]);
+	free(pipex->pipefd);
 	free(pipex);
 	exit(0);
 }
