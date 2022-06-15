@@ -84,7 +84,7 @@ void	ft_exit_error(t_grp *pipex)
 	free(pipex->cmd1path);
 	free(pipex->cmd2path);
 	while (pipex->cmd1 && pipex->cmd1[i] != NULL)
-		free(pipex->cmd1[i++]);
+		free(pipex->cmd1[i++]); nbngj
 	free(pipex->cmd1);
 	i = 0;
 	while (pipex->cmd2 && pipex->cmd2[i] != NULL)
@@ -98,7 +98,7 @@ void	ft_exit_error(t_grp *pipex)
 	close(pipex->infilefd);
 	close(pipex->outfilefd);
 	i = 0;
-	while (i <= pipex->pidnbr)
+	while (i < pipex->pidnbr * 2)
 		close(pipex->pipefd[i++]);
 	free(pipex->pipefd);
 	free(pipex);
