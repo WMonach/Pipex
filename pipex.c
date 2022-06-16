@@ -14,7 +14,9 @@ int	main(int argc, char **argv, char **envp)
 	ft_get_init(pipex);
 	ft_parsing(pipex, argv, envp, argc - 3);
 	while (++i < pipex->pidnbr)
+	{
 		ft_exec_cmd(pipex, envp, i);
+	}
 	close (pipex->outfilefd);
 	close (pipex->infilefd);
 	i = 0;
@@ -96,7 +98,7 @@ void	ft_exit_error(t_grp *pipex)
 	close(pipex->infilefd);
 	close(pipex->outfilefd);
 	i = 0;
-	while (i <= pipex->pidnbr)
+	while (i < pipex->pidnbr * 2)
 		close(pipex->pipefd[i++]);
 	free(pipex->pipefd);
 	free(pipex);

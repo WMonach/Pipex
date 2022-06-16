@@ -3,9 +3,7 @@
 char	**ft_get_cmd(char *argcmd)
 {
 	char	**cmd;
-	int		i;
 
-	i = 0;
 	cmd = ft_split(argcmd, ' ');
 	return (cmd);
 }
@@ -76,8 +74,8 @@ int	ft_init_pipe(t_grp *pipex, int pidnbr)
 
 	i = 0;
 	j = 0;
-	pipex->pipefd = malloc(sizeof(int) * ((pidnbr - 1) * 2));
-	while (i < pidnbr - 1)
+	pipex->pipefd = malloc(sizeof(int) * ((pidnbr) * 2));
+	while (i < pidnbr)
 	{
 		if (pipe(pipex->pipefd + j) < 0)
 			return (0);
@@ -85,7 +83,7 @@ int	ft_init_pipe(t_grp *pipex, int pidnbr)
 		i++;
 	}
 	// i = 0;
-	// while (i < (pidnbr - 1) * 2)
+	// while (i < (pidnbr) * 2)
 	// {
 	// 	printf("%d\n", pipex->pipefd[i]);
 	// 	i++;

@@ -4,13 +4,29 @@ void	ft_change_fd(t_grp *pipex, char **envp, int pid)
 {
 	int	i;
 
-	i = 0;
-	if (dup2(pipex->pipefd[0], 0) == -1)
+	i = -1;
+	pipex->fdwrite = pid * 2 + 1;
+	pipex->fdread = pipex->fdwrite - 3;
+	printf("pidfdmid=%d\nfdread=%d\nfdwrite=%d\n", pid, pipex->fdread, pipex->fdwrite);
+	if (dup2(pipex->pipefd[pipex->fdread], 0) == -1)
 		ft_exit_error(pipex);
-	if (dup2(pipex->pipefd[3], 1) == -1)
+	if (dup2(pipex->pipefd[pipex->fdwrite], 1) == -1)
 		ft_exit_error(pipex);
-	if (close(pipex->pipefd[2]) == -1)
+	if (close(pipex->outfilefd) == -1)
 		ft_exit_error(pipex);
+	if (close(pipex->infilefd) == -1)
+		ft_exit_error(pipex);
+	while (++i < pipex->fdread)
+		if (close(pipex->pipefd[i]) == -1)
+			ft_exit_error(pipex);
+	i = pipex->fdread;
+	while (++i < pipex->fdwrite)
+		if (close(pipex->pipefd[i]) == -1)
+			ft_exit_error(pipex);
+	i = pipex->fdwrite;
+	while (++i < (pipex->pidnbr) * 2)
+		if (close(pipex->pipefd[i]) == -1)
+			ft_exit_error(pipex);
 	if (execve(pipex->cmdspath[pid], pipex->cmds[pid], envp) == -1)
 		ft_exit_error(pipex);
 }
@@ -38,13 +54,18 @@ void	ft_change_fdfirst(t_grp *pipex, char **envp, int pid)
 {
 	int	i;
 
-	i = 0;
+	i = 1;
 	if (dup2(pipex->infilefd, 0) == -1)
 		ft_exit_error(pipex);
 	if (dup2(pipex->pipefd[1], 1) == -1)
 		ft_exit_error(pipex);
 	if (close(pipex->pipefd[0]) == -1)
 		ft_exit_error(pipex);
+	if (close(pipex->outfilefd) == -1)
+		ft_exit_error(pipex);
+	while (++i < (pipex->pidnbr) * 2)
+		if (close(pipex->pipefd[i]))
+			ft_exit_error(pipex);
 	if (execve(pipex->cmdspath[pid], pipex->cmds[pid], envp) == -1)
 		ft_exit_error(pipex);
 }
@@ -53,13 +74,18 @@ void	ft_change_fdlast(t_grp *pipex, char **envp, int pid)
 {
 	int	i;
 
-	i = 0;
+	i = -1;
 	if (dup2(pipex->outfilefd, 1) == -1)
 		ft_exit_error(pipex);
-	if (dup2(pipex->pipefd[2], 0) == -1)
+	if (dup2(pipex->pipefd[((pipex->pidnbr - 1) * 2)], 0) == -1)
 		ft_exit_error(pipex);
-	if (close(pipex->pipefd[3]) == -1)
+	if (close(pipex->pipefd[((pipex->pidnbr - 1) * 2) + 1]) == -1)
 		ft_exit_error(pipex);
+	if (close(pipex->infilefd) == -1)
+		ft_exit_error(pipex);
+	while (++i < ((pipex->pidnbr - 1) * 2))
+		if (close(pipex->pipefd[i]) == -1)
+			ft_exit_error(pipex);
 	if (execve(pipex->cmdspath[pid], pipex->cmds[pid], envp) == -1)
 		ft_exit_error(pipex);
 }

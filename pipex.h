@@ -8,6 +8,7 @@
 # include <fcntl.h>
 # include "libft/libft.h"
 # include <errno.h>
+# include <sys/wait.h>
 
 typedef struct s_grp
 {
@@ -23,6 +24,8 @@ typedef struct s_grp
 	int		*pid;
 	int		pidnbr;
 	int		*pipefd;
+	int		fdwrite;
+	int		fdread;
 }	t_grp;
 
 /*PARSING*/
