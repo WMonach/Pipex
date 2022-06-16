@@ -111,10 +111,3 @@ void	ft_waitpid(t_grp *pipex)
 	while (++i < pipex->pidnbr)
 		waitpid(pipex->pid[i], NULL, 0);
 }
-/*
-preparer des fork pour faire des enfants
-dans ses enfants on dub les file 1 et 2
-pour changer leurs sorties et entrees
-quand tout est set on real les execve
-qui vont kill les 2 gosses
-*/
