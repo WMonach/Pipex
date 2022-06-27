@@ -8,11 +8,11 @@ char	**ft_get_cmd(char *argcmd)
 	return (cmd);
 }
 
-char	*ft_get_cmdpathbis(char *path, char **cmd, char **cmdpaths)
+char	*ft_get_cmdpathbis(t_grp *pipex, char *path, char **cmd, char **cmdpaths)
 {
 	path = ft_strjoin(path, cmd[0]);
 	if (path == NULL)
-		return (ft_free_spliterr(cmd, cmdpaths));
+		return (ft_free_spliterr(pipex, cmd, cmdpaths));
 	if (access(path, X_OK) == 0)
 	{
 		ft_free_split(cmd, cmdpaths);
@@ -42,29 +42,28 @@ char	*ft_get_cmdpath(t_grp *pipex, char *argcmd, char **envp)
 	{
 		path = ft_strjoin(cmdpaths[i], "/");
 		if (path == NULL)
-			return (ft_free_spliterr(cmd, cmdpaths));
-		path = ft_get_cmdpathbis(path, cmd, cmdpaths);
+			return (ft_free_spliterr(pipex, cmd, cmdpaths));
+		path = ft_get_cmdpathbis(pipex, path, cmd, cmdpaths);
 		if (path != NULL)
 			return (path);
 	}
-	printf("command not found: %s\n", cmd[0]);
 	ft_free_split(cmd, cmdpaths);
-	ft_exit_error(pipex);
-	return ("ha tu m'as eu batard");
+	ft_exit_perror(pipex, ERR_CMD);
+	return (NULL);
 }
 
 void	ft_get_pid(t_grp *pipex, int pidnbr)
 {
 	pipex->pid = malloc(sizeof(int) * pidnbr);
 	if (pipex->pid == NULL)
-		ft_exit_error(pipex);
+		ft_exit_perror(pipex, "alloc");
 	pipex->pidnbr = pidnbr;
 }
 
 void	ft_get_fd(t_grp *pipex, char **argv, int pidnbr)
 {
 	pipex->infilefd = open(argv[1], O_RDONLY);
-	pipex->outfilefd = open(argv[pidnbr + 2], O_RDWR);
+	pipex->outfilefd = open(argv[pidnbr + 2], O_CREAT | O_RDWR | O_TRUNC, 0000644);
 }
 
 int	ft_init_pipe(t_grp *pipex, int pidnbr)
@@ -74,21 +73,14 @@ int	ft_init_pipe(t_grp *pipex, int pidnbr)
 
 	i = 0;
 	j = 0;
-	pipex->pipefd = malloc(sizeof(int) * ((pidnbr) * 2));
-	while (i < pidnbr)
+	pipex->pipefd = malloc(sizeof(int) * ((pidnbr - 1) * 2));
+	while (i < pidnbr - 1)
 	{
 		if (pipe(pipex->pipefd + j) < 0)
 			return (0);
 		j += 2;
 		i++;
 	}
-	// i = 0;
-	// while (i < (pidnbr) * 2)
-	// {
-	// 	printf("%d\n", pipex->pipefd[i]);
-	// 	i++;
-	// }
-
 	return (1);
 }
 
@@ -101,25 +93,24 @@ void	ft_parsing(t_grp *pipex, char **argv, char **envp, int pidnbr)
 	j = 2;
 	ft_get_fd(pipex, argv, pidnbr);
 	if (pipex->infilefd < 0)
-		perror("infile");
+		perror(ERR_INFILE);
 	if (pipex->outfilefd < 0)
-		perror("outfile");
+		perror(ERR_OUTFILE);
 	ft_get_pid(pipex, pidnbr);
 	if (ft_init_pipe(pipex, pidnbr) == 0)
-	{
-		printf("pipe error\n");
-		ft_exit_error(pipex);
-	}
+		ft_exit_perror(pipex, ERR_PIPE);
 	pipex->cmdspath = (char **)malloc(sizeof(char *) * (pidnbr + 1));
+	pipex->cmdspath[pidnbr] = NULL;
 	while (++i < pidnbr)
 	{
 		pipex->cmdspath[i] = ft_get_cmdpath(pipex, argv[j++], envp);
 		if (pipex->cmdspath[i] == NULL)
-			ft_exit_error(pipex);
+			ft_exit_perror(pipex, ERR_CMD);
 	}
 	i = -1;
 	j = 2;
 	pipex->cmds = (char ***)malloc(sizeof(char **) * (pidnbr + 1));
+	pipex->cmds[pidnbr] = NULL;
 	while (++i < pidnbr)
 	{
 		pipex->cmds[i] = ft_get_cmd(argv[j++]);
@@ -127,7 +118,3 @@ void	ft_parsing(t_grp *pipex, char **argv, char **envp, int pidnbr)
 			ft_exit_error(pipex);
 	}
 }
-
-/*
-
-*/

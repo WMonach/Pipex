@@ -10,6 +10,13 @@
 # include <errno.h>
 # include <sys/wait.h>
 
+# define ERR_INFILE "Infile"
+# define ERR_OUTFILE "Outfile"
+# define ERR_INPUT "Invalid number of arguments.\n"
+# define ERR_PIPE "Pipe"
+# define ERR_ENVP "Environment"
+# define ERR_CMD "Command not found: "
+
 typedef struct s_grp
 {
 	char	*cmd1path;
@@ -34,9 +41,9 @@ void	ft_get_init(t_grp *pipex);
 void	ft_get_fd(t_grp *pipex, char **argv, int pidnbr);
 void	ft_free_split(char **to_free1, char **to_free2);
 char	**ft_get_cmd(char *argcmd);
-char	*ft_free_spliterr(char **to_free1, char **to_free2);
+char	*ft_free_spliterr(t_grp *pipex, char **to_free1, char **to_free2);
 char	*ft_get_cmdpath(t_grp *pipex, char *argcmd, char **envp);
-char	*ft_get_cmdpathbis(char *path, char **cmd, char **cmdpaths);
+char	*ft_get_cmdpathbis(t_grp *pipex, char *path, char **cmd, char **cmdpaths);
 
 /*EXEC*/
 void	ft_exec_cmd(t_grp *pipex, char **envp, int pid);
@@ -46,9 +53,11 @@ void	ft_change_fdlast(t_grp *pipex, char **envp, int pid);
 void	ft_change_fd(t_grp *pipex, char **envp, int pid);
 
 void	ft_error(char *str);
+void	ft_exit_perror(t_grp *pipex, char *err);
 void	ft_exit_error(t_grp *pipex);
 void	ft_get_pid(t_grp *pipex, int pidnbr);
 void	ft_waitpid(t_grp *pipex);
 int		ft_check(int argc, char **argv);
 void	ft_change_fd_mid(t_grp *pipex, char **envp, int pid);
+int		ft_close_fd(t_grp *pipex, int i);
 #endif
