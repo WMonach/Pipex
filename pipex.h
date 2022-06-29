@@ -43,7 +43,8 @@ void	ft_free_split(char **to_free1, char **to_free2);
 char	**ft_get_cmd(char *argcmd);
 char	*ft_free_spliterr(t_grp *pipex, char **to_free1, char **to_free2);
 char	*ft_get_cmdpath(t_grp *pipex, char *argcmd, char **envp);
-char	*ft_get_cmdpathbis(t_grp *pipex, char *path, char **cmd, char **cmdpaths);
+char	*ft_get_cmdpathbis(t_grp *pipex, char *path, char **cmd,
+			char **cmdpaths);
 
 /*EXEC*/
 void	ft_exec_cmd(t_grp *pipex, char **envp, int pid);
@@ -60,4 +61,6 @@ void	ft_waitpid(t_grp *pipex);
 int		ft_check(int argc, char **argv);
 void	ft_change_fd_mid(t_grp *pipex, char **envp, int pid);
 int		ft_close_fd(t_grp *pipex, int i);
+
+void	ft_exit_strerror(t_grp *pipex, char *error);
 #endif

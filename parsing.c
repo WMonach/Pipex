@@ -32,6 +32,8 @@ char	*ft_get_cmdpath(t_grp *pipex, char *argcmd, char **envp)
 	cmd = ft_split(argcmd, ' ');
 	if (cmd == NULL)
 		return (NULL);
+	if (access(cmd[0], X_OK) == 0)
+		return (cmd[0]);
 	while (!ft_strnstr(envp[i], "PATH=", 5))
 		i++;
 	cmdpaths = ft_split(envp[i] + 5, ':');
@@ -63,7 +65,8 @@ void	ft_get_pid(t_grp *pipex, int pidnbr)
 void	ft_get_fd(t_grp *pipex, char **argv, int pidnbr)
 {
 	pipex->infilefd = open(argv[1], O_RDONLY);
-	pipex->outfilefd = open(argv[pidnbr + 2], O_CREAT | O_RDWR | O_TRUNC, 0000644);
+	pipex->outfilefd = open(argv[pidnbr + 2],
+			O_CREAT | O_RDWR | O_TRUNC, 0000644);
 }
 
 int	ft_init_pipe(t_grp *pipex, int pidnbr)

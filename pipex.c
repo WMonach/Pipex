@@ -124,6 +124,32 @@ void	ft_exit_error(t_grp *pipex)
 	exit(0);
 }
 
+void	ft_exit_strerror(t_grp *pipex, char *error)
+{
+	int	i;
+
+	i = 0;
+	ft_putstr_fd(error, 0);
+	free(pipex->cmd1path);
+	free(pipex->cmd2path);
+	while (pipex->cmd1 && pipex->cmd1[i] != NULL)
+		free(pipex->cmd1[i++]);
+	free(pipex->cmd1);
+	i = 0;
+	while (pipex->cmd2 && pipex->cmd2[i] != NULL)
+		free(pipex->cmd2[i++]);
+	free(pipex->cmd2);
+	i = 0;
+	while (pipex->cmdpaths && pipex->cmdpaths[i] != NULL)
+		free(pipex->cmdpaths[i++]);
+	free(pipex->cmdpaths);
+	free(pipex->pid);
+	ft_close_fd(pipex, 0);
+	free(pipex->pipefd);
+	free(pipex);
+	exit(0);
+}
+
 void	ft_waitpid(t_grp *pipex)
 {
 	int	i;
