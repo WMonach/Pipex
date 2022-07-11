@@ -19,15 +19,11 @@
 
 typedef struct s_grp
 {
-	char	*cmd1path;
 	char	**cmdpaths;
-	char	*cmd2path;
 	char	**cmdspath;
 	char	***cmds;
 	int		infilefd;
 	int		outfilefd;
-	char	**cmd1;
-	char	**cmd2;
 	int		*pid;
 	int		pidnbr;
 	int		*pipefd;
@@ -53,9 +49,6 @@ void	ft_exec_cmd2(t_grp *pipex, char **envp);
 void	ft_change_fdlast(t_grp *pipex, char **envp, int pid);
 void	ft_change_fd(t_grp *pipex, char **envp, int pid);
 
-void	ft_error(char *str);
-void	ft_exit_perror(t_grp *pipex, char *err);
-void	ft_exit_error(t_grp *pipex);
 void	ft_get_pid(t_grp *pipex, int pidnbr);
 void	ft_waitpid(t_grp *pipex);
 int		ft_check(int argc, char **argv);
@@ -63,4 +56,7 @@ void	ft_change_fd_mid(t_grp *pipex, char **envp, int pid);
 int		ft_close_fd(t_grp *pipex, int i);
 
 void	ft_exit_strerror(t_grp *pipex, char *error);
+void	ft_error(char *str);
+void	ft_exit_perror(t_grp *pipex, char *err);
+void	ft_exit_error(t_grp *pipex);
 #endif
