@@ -16,6 +16,9 @@ FILES = pipex.c									\
 		parsing.c								\
 		exec.c									\
 		check.c									\
+		free.c									\
+		init.c									\
+		init_parsing.c							\
 
 all: libs $(NAME)
 
@@ -28,10 +31,6 @@ $(NAME): $(OBJ) $(LIBSDIR)libft.a
 $(OBJS_DIR)/%.o:		%.c pipex.h ${LIBSDIR}libft.h ${LIBSDIR}libft.a Makefile
 				mkdir -p $(dir $@)
 				${CC} ${CFLAGS} -I$(LIBSDIR) -c $< -o $@
-
-# objs :
-# 				mkdir -p $(dir $@)
-# 				${CC} ${CFLAGS} -I$(LIBSDIR) -c $< -o $@
 
 clean :
 				${MAKE} clean -C ${LIBSDIR}

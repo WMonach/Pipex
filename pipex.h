@@ -19,15 +19,11 @@
 
 typedef struct s_grp
 {
-	char	*cmd1path;
 	char	**cmdpaths;
-	char	*cmd2path;
 	char	**cmdspath;
 	char	***cmds;
 	int		infilefd;
 	int		outfilefd;
-	char	**cmd1;
-	char	**cmd2;
 	int		*pid;
 	int		pidnbr;
 	int		*pipefd;
@@ -45,6 +41,10 @@ char	*ft_free_spliterr(t_grp *pipex, char **to_free1, char **to_free2);
 char	*ft_get_cmdpath(t_grp *pipex, char *argcmd, char **envp);
 char	*ft_get_cmdpathbis(t_grp *pipex, char *path, char **cmd,
 			char **cmdpaths);
+void	ft_open_file(int pidnbr, char **argv, t_grp *pipex);
+void	ft_init_cmds(int pidnbr, char **argv, t_grp *pipex);
+void	ft_init_cmdspath(int pidnbr, char **argv, char **envp, t_grp *pipex);
+int		ft_init_pipe(t_grp *pipex, int pidnbr);
 
 /*EXEC*/
 void	ft_exec_cmd(t_grp *pipex, char **envp, int pid);
@@ -53,14 +53,15 @@ void	ft_exec_cmd2(t_grp *pipex, char **envp);
 void	ft_change_fdlast(t_grp *pipex, char **envp, int pid);
 void	ft_change_fd(t_grp *pipex, char **envp, int pid);
 
-void	ft_error(char *str);
-void	ft_exit_perror(t_grp *pipex, char *err);
-void	ft_exit_error(t_grp *pipex);
 void	ft_get_pid(t_grp *pipex, int pidnbr);
 void	ft_waitpid(t_grp *pipex);
 int		ft_check(int argc, char **argv);
 void	ft_change_fd_mid(t_grp *pipex, char **envp, int pid);
-int		ft_close_fd(t_grp *pipex, int i);
+int		ft_close_all_fd(t_grp *pipex, int i);
+int		ft_close_fd(t_grp *pipex);
 
 void	ft_exit_strerror(t_grp *pipex, char *error);
+void	ft_error(char *str);
+void	ft_exit_perror(t_grp *pipex, char *err);
+void	ft_exit_error(t_grp *pipex);
 #endif
