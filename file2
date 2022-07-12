@@ -1,3 +1,0 @@
-OBJ =	$(addprefix $(OBJS_DIR)/, $(FILES:.c=.o))$
-				mkdir -p $(dir $@)$
-# 				mkdir -p $(dir $@)$
