@@ -33,7 +33,7 @@ typedef struct s_grp
 void	ft_parsing(t_grp *pipex, char **argv, char **envp, int pidnbr);
 void	ft_get_init(t_grp *pipex);
 void	ft_get_fd(t_grp *pipex, char **argv, int pidnbr);
-void	ft_free_split(char **to_free1, char **to_free2);
+char	*ft_free_split(char **to_free1, char **to_free2);
 char	**ft_get_cmd(char *argcmd);
 char	*ft_free_spliterr(t_grp *pipex, char **to_free1, char **to_free2);
 char	*ft_get_cmdpath(t_grp *pipex, char *argcmd, char **envp);
@@ -65,4 +65,6 @@ void	ft_exit_error(t_grp *pipex);
 int		ft_free_all(t_grp *pipex);
 char	*exit_cmdpath(char **cmd, char **cmdpaths, t_grp *pipex);
 char	*free_cmd_without_path(char **cmd);
+int		search_line_path(char **envp);
+void	ft_delone(void	*str);
 #endif

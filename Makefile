@@ -19,6 +19,7 @@ FILES = pipex.c									\
 		free.c									\
 		init.c									\
 		init_parsing.c							\
+		exit.c									\
 
 all: libs $(NAME)
 

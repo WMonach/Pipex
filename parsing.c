@@ -31,15 +31,10 @@ char	*ft_get_cmdpath(t_grp *pipex, char *argcmd, char **envp)
 		return (NULL);
 	if (access(cmd[0], X_OK) == 0)
 		return (free_cmd_without_path(cmd));
-	i = 0;
-	while (!ft_strnstr(envp[i], "PATH=", 5))
-		i++;
+	i = search_line_path(envp);
 	cmdpaths = ft_split(envp[i] + 5, ':');
 	if (cmdpaths == NULL)
-	{
-		ft_free_split(cmd, cmdpaths);
-		return (NULL);
-	}
+		return (ft_free_split(cmd, cmdpaths));
 	i = -1;
 	while (cmdpaths[++i] != NULL)
 	{
@@ -72,22 +67,12 @@ void	ft_open_file(int pidnbr, char **argv, t_grp *pipex)
 		ft_exit_perror(pipex, argv[pidnbr + 2]);
 }
 
-char	*free_cmd_without_path(char **cmd)
+int	search_line_path(char **envp)
 {
 	int	i;
 
 	i = 0;
-	while (cmd[++i] != NULL)
-		free(cmd[i]);
-	free(cmd);
-	return (cmd[0]);
-}
-
-char	*exit_cmdpath(char **cmd, char **cmdpaths, t_grp *pipex)
-{
-	ft_putstr_fd(cmd[0], 0);
-	ft_putstr_fd(": command not found\n", 0);
-	ft_free_split(cmd, cmdpaths);
-	ft_exit_error(pipex);
-	return (NULL);
+	while (!ft_strnstr(envp[i], "PATH=", 5))
+		i++;
+	return (i);
 }
