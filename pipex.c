@@ -18,15 +18,10 @@ int	main(int argc, char **argv, char **envp)
 		ft_exec_cmd(pipex, envp, i);
 	}
 	if (ft_close_all_fd(pipex, 0) == -1)
-		return (1);
+		return (ft_free_all(pipex));
 	ft_waitpid(pipex);
+	// ft_free_all(pipex);
 	return (0);
-}
-
-void	ft_error(char *str)
-{
-	printf("%s\n", str);
-	exit(0);
 }
 
 void	ft_waitpid(t_grp *pipex)

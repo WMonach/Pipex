@@ -1,17 +1,21 @@
 #include "pipex.h"
 
-
 char	*ft_get_cmdpathbis(t_grp *pipex, char *path, char **cmd,
 	char **cmdpaths)
 {
-	path = ft_strjoin(path, cmd[0]);
-	if (path == NULL)
+	char	*paths;
+
+
+	paths = ft_strjoin(path, cmd[0]);
+	free(path);
+	if (paths == NULL)
 		return (ft_free_spliterr(pipex, cmd, cmdpaths));
-	if (access(path, X_OK) == 0)
+	if (access(paths, X_OK) == 0)
 	{
 		ft_free_split(cmd, cmdpaths);
-		return (path);
+		return (paths);
 	}
+	free(paths);
 	return (NULL);
 }
 
@@ -22,19 +26,20 @@ char	*ft_get_cmdpath(t_grp *pipex, char *argcmd, char **envp)
 	char	**cmdpaths;
 	int		i;
 
-	i = 0;
 	cmd = ft_split(argcmd, ' ');
 	if (cmd == NULL)
 		return (NULL);
 	if (access(cmd[0], X_OK) == 0)
-	{
-		return (cmd[0]);
-	}
+		return (free_cmd_without_path(cmd));
+	i = 0;
 	while (!ft_strnstr(envp[i], "PATH=", 5))
 		i++;
 	cmdpaths = ft_split(envp[i] + 5, ':');
 	if (cmdpaths == NULL)
+	{
+		ft_free_split(cmd, cmdpaths);
 		return (NULL);
+	}
 	i = -1;
 	while (cmdpaths[++i] != NULL)
 	{
@@ -43,14 +48,9 @@ char	*ft_get_cmdpath(t_grp *pipex, char *argcmd, char **envp)
 			return (ft_free_spliterr(pipex, cmd, cmdpaths));
 		path = ft_get_cmdpathbis(pipex, path, cmd, cmdpaths);
 		if (path != NULL)
-		{
 			return (path);
-		}
 	}
-	printf("%s: command not found\n", cmd[0]);
-	ft_free_split(cmd, cmdpaths);
-	ft_exit_error(pipex);
-	return (NULL);
+	return (exit_cmdpath(cmd, cmdpaths, pipex));
 }
 
 void	ft_parsing(t_grp *pipex, char **argv, char **envp, int pidnbr)
@@ -70,4 +70,24 @@ void	ft_open_file(int pidnbr, char **argv, t_grp *pipex)
 		ft_exit_perror(pipex, argv[1]);
 	if (pipex->outfilefd < 0)
 		ft_exit_perror(pipex, argv[pidnbr + 2]);
+}
+
+char	*free_cmd_without_path(char **cmd)
+{
+	int	i;
+
+	i = 0;
+	while (cmd[++i] != NULL)
+		free(cmd[i]);
+	free(cmd);
+	return (cmd[0]);
+}
+
+char	*exit_cmdpath(char **cmd, char **cmdpaths, t_grp *pipex)
+{
+	ft_putstr_fd(cmd[0], 0);
+	ft_putstr_fd(": command not found\n", 0);
+	ft_free_split(cmd, cmdpaths);
+	ft_exit_error(pipex);
+	return (NULL);
 }

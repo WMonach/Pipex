@@ -25,7 +25,6 @@ char	**ft_get_cmd(char *argcmd)
 
 void	ft_get_init(t_grp *pipex)
 {
-	pipex->cmdpaths = NULL;
 	pipex->pid = NULL;
 	pipex->cmdspath = NULL;
 	pipex->cmds = NULL;

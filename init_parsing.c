@@ -11,6 +11,7 @@ void	ft_init_cmds(int pidnbr, char **argv, t_grp *pipex)
 	if (pipex->cmds == NULL)
 		ft_exit_error(pipex);
 	pipex->cmds[pidnbr] = NULL;
+	pipex->cmds[0] = NULL;
 	while (++i < pidnbr)
 	{
 		pipex->cmds[i] = ft_get_cmd(argv[j++]);

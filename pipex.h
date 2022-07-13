@@ -1,4 +1,3 @@
-
 #ifndef PIPEX_H
 # define PIPEX_H
 
@@ -19,7 +18,6 @@
 
 typedef struct s_grp
 {
-	char	**cmdpaths;
 	char	**cmdspath;
 	char	***cmds;
 	int		infilefd;
@@ -64,4 +62,7 @@ void	ft_exit_strerror(t_grp *pipex, char *error);
 void	ft_error(char *str);
 void	ft_exit_perror(t_grp *pipex, char *err);
 void	ft_exit_error(t_grp *pipex);
+int		ft_free_all(t_grp *pipex);
+char	*exit_cmdpath(char **cmd, char **cmdpaths, t_grp *pipex);
+char	*free_cmd_without_path(char **cmd);
 #endif
