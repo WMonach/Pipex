@@ -67,4 +67,5 @@ char	*exit_cmdpath(char **cmd, char **cmdpaths, t_grp *pipex);
 char	*free_cmd_without_path(char **cmd);
 int		search_line_path(char **envp);
 void	ft_delone(void	*str);
+void	free_cmd(t_grp *pipex);
 #endif

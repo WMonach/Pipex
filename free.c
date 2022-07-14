@@ -54,20 +54,9 @@ char	*free_cmd_without_path(char **cmd)
 int	ft_free_all(t_grp *pipex)
 {
 	int	i;
-	int	j;
 
 	if (pipex->cmds != NULL)
-	{
-		i = -1;
-		while (pipex->cmds[++i] != NULL)
-		{
-			j = -1;
-			while (pipex->cmds[i][++j] != NULL)
-				free(pipex->cmds[i][j]);
-			free(pipex->cmds[i]);
-		}
-		free(pipex->cmds);
-	}
+		free_cmd(pipex);
 	if (pipex->cmdspath != NULL)
 	{
 		i = -1;

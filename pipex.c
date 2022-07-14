@@ -20,7 +20,7 @@ int	main(int argc, char **argv, char **envp)
 	if (ft_close_all_fd(pipex, 0) == -1)
 		return (ft_free_all(pipex));
 	ft_waitpid(pipex);
-	// ft_free_all(pipex);
+	ft_free_all(pipex);
 	return (0);
 }
 
